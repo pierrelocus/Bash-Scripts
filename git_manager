@@ -1,0 +1,29 @@
+#!/bin/bash
+
+for line in $(find ./test* -maxdepth 2 -type d -name .git -print)
+do
+	echo "Processing $line"
+	cd "$line/.."
+	if [[ "$1" == "composer" ]];
+	then
+		if [[ ! -z "$4" ]];
+		then
+			composer $2 $3 $4
+		elif [[ ! -z "$3" ]];
+		then
+			composer $2 $3
+		else
+			composer $2
+		fi
+	elif [[ ! -z "$3" ]];
+	then
+		git $1 $2 $3
+	elif [[ ! -z "$2" ]];
+	then
+		git $1 $2
+	else
+		git $1
+	fi
+	cd -
+	sleep 1
+done
